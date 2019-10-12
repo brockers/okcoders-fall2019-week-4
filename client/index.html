@@ -13,11 +13,28 @@
 <body>
    <h1>My List of things to do:</h1>
    <ul class="todolist"></ul>
+   <div class="addNew">
+       <input type="text" id="newTask" placeholder="Beat Texas"></input>
+       <button type="button" onclick="AddTask()">Add Task</button>
+   </div>
    <script>
-        $.getJSON("/todo/all", function(data){
-            data.forEach(function(item,index){
-                $(".todolist").append("<li>" + item.task + "</li>");
-            })
+        function AddTask(){
+            // Figure out what goes in {} using jQuery
+            $.post('/todo/add',{}).done(function(){
+                console.log( $('#newTask').val() );
+                $('#newTask').val("");
+                reloadPage();
+            });
+        }
+        function reloadPage(){
+            $.getJSON("/todo/all", function(data){
+                data.forEach(function(item,index){
+                    $(".todolist").append("<li>" + item.task + "</li>");
+                })
+            });
+        }
+        $(document).ready(function(){
+            reloadPage();
         });
    </script>
 </body>
